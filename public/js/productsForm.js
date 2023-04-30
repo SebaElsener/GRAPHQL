@@ -2,7 +2,7 @@
 const productsForm = document.getElementById('productsForm')
 
 // Evento nuevo ingreso de producto al servidor
-productsForm.addEventListener('submit', (e) => {
+productsForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     newProduct = {
         product: productsForm[0].value,
@@ -12,18 +12,29 @@ productsForm.addEventListener('submit', (e) => {
         code: productsForm[4].value,
         thumbnail: productsForm[5].value
     }
-    fetch('/api/productos/',
+    await fetch('/api/graphql/',
         {
             method: 'POST',
-            body: JSON.stringify(newProduct),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query:
+                `
+                mutation {
+                    addProduct(data: {
+                        product: "${newProduct.product}",
+                        price: ${newProduct.price},
+                        stock: ${newProduct.stock},
+                        description: "${newProduct.description}",
+                        code: "${newProduct.code}",
+                        thumbnail: "${newProduct.thumbnail}"
+                    }) { product }
+                }
+                `
+            })
         })
         .then(res => res.json())
         .then(json => {
             Toastify({
-                text: `PRODUCTO ${json.product} AGREGADO CON EXITO`,
+                text: `PRODUCTO ${json.data.addProduct.product} AGREGADO CON EXITO`,
                 offset: {
                     x: 150,
                     y: 150

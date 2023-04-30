@@ -1,6 +1,7 @@
 
 const confirmPurchaseBtn = document.getElementById('confirmPurchaseBtn')
 const cancelPurchaseBtn = document.getElementsByClassName('cancelPurchaseBtn')
+const userTitle = document.getElementsByClassName('userTitle')
 
 let userCartId
 let userId
@@ -17,54 +18,91 @@ const orderMessage = 'Orden de compra generada con exito,\
 // Confirmar orden de compra
 confirmPurchaseBtn.addEventListener('click', async () => {
     await fetch('/api/userdata/purchaseorder')
-    Toastify({
-        text: orderMessage,
-        offset: {
-            x: 150,
-            y: 150
-        },
-        duration: 7000,
-        destination: "/api/productos",
-        newWindow: false,
-        close: false,
-        gravity: "top", // `top` or `bottom`
-        position: "left", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "linear-gradient(to right, #00b09b, #96c93d)",
-        },
-        callback: async function(){
-            await deleteCart()
-            document.location.href = '/api/productos'
-        } // Callback after click
-      }).showToast()
+        .then(res => res.json())
+        .then(json => {
+            Toastify({
+                text: orderMessage,
+                offset: {
+                    x: 150,
+                    y: 150
+                },
+                duration: 7000,
+                destination: "/api/productos",
+                newWindow: false,
+                close: false,
+                gravity: "top", // `top` or `bottom`
+                position: "left", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+                callback: async function(){
+                    await deleteCart()
+                    document.location.href = '/api/productos'
+                } // Callback after click
+            }).showToast()
+        })
 })
 
 const deleteCart = async () => {
     // Traer ID user y ID carrito asociado al user
-    await fetch('/api/userdata/getuser')
-    .then(res => res.json())
-    .then(json => {
-        userId = json._id
-        userCartId = json.cartId
-    })
-    // Delete ID carrito en documento user
-    const data = { userId: userId, cartId: '' }
-    await fetch('/api/userdata/',
+    const user = userTitle[0].innerText
+    await fetch('/api/graphql',
         {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({query:
+                `
+                {
+                    getByUser(user: "${user}") {
+                        _id,
+                        cartId
+                    }
+                }
+                `
+            })
         })
         .then(res => res.json())
-        .then(json => console.log(json))
+        .then(json => {
+            userId = json.data.getByUser._id
+            userCartId = json.data.getByUser.cartId
+        })
+        // Delete ID carrito en documento user
+        await fetch('/api/graphql/',
+            {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({query:
+                    `
+                    mutation {
+                        updateUser (
+                            id: "${userId}",
+                            data: { cartId: "" }
+                        ) { cartId }
+                    }
+                    `
+                })
+            })
+            .then(res => res.json())
+            .then(json => console.log(json))
 
     // Delete carrito
-    await fetch(`/api/carrito/${userCartId}`, { method: 'DELETE'})
+    await fetch('/api/graphql/',
+        {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query:
+                `
+                mutation {
+                    deleteCart
+                        (id:"${userCartId}")
+                    { _id }
+                }
+                `
+            })
+        })
         .then(res => res.json())
         .then(async json => {
-            console.log(json)
+            console.log(json.data.deleteCart)
         })
 }

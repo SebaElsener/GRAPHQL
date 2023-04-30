@@ -5,7 +5,9 @@ const deleteCartBtn = document.getElementsByClassName('deleteCartBtn')
 const endPurchaseBtn = document.getElementById('endPurchaseBtn')
 const emptyCart = document.getElementsByClassName('emptyCart')
 const backLink = document.getElementsByClassName('backLink')
+const userTitle = document.getElementsByClassName('userTitle')
 
+const user = userTitle[0].innerText
 let userCartId
 let userId
 let userName
@@ -19,13 +21,29 @@ if (emptyCart[0]) {
 
 const userData = async () => {
     // Traer ID user y ID carrito asociado al user
-    await fetch('/api/userdata/getuser')
+    await fetch('/api/graphql',
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({query:
+                `
+                {
+                    getByUser(user: "${user}") {
+                    _id,
+                    cartId,
+                    user,
+                    name
+                    }
+                }
+                `
+            })
+        })
         .then(res => res.json())
         .then(json => {
-            userId = json._id
-            userCartId = json.cartId
-            userEmail = json.user
-            userName = json.name
+            userId = json.data.getByUser._id
+            userCartId = json.data.getByUser.cartId
+            userEmail = json.data.getByUser.user
+            userName = json.data.getByUser.name
         })
 }
 
@@ -33,39 +51,94 @@ const userData = async () => {
 deleteCartBtn[0].addEventListener('click', async () => {
     await userData()
     // Delete ID carrito en documento user
-    const data = { userId: userId, cartId: '' }
-    await fetch('/api/userdata/',
+    await fetch('/api/graphql/',
         {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query:
+                `
+                mutation {
+                    updateUser (
+                        id: "${userId}",
+                        data: { cartId: "" }
+                    ) { cartId }
+                }
+                `
+            })
         })
         .then(res => res.json())
-        .then(json => console.log(json))
+        .then(json => console.log(json.data.updateUser))
     // Delete carrito
-    await fetch(`/api/carrito/${userCartId}`, { method: 'DELETE'})
-        .then(res => res.json())
-        .then(async json => {
-            console.log(json)
+    await fetch('/api/graphql/',
+        {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query:
+                `
+                mutation {
+                    deleteCart
+                        (id:"${userCartId}")
+                    { _id }
+                }
+                `
+            })
         })
-
-    document.location.reload()
+        .then(res => res.json())
+        .then(json => {
+            console.log(json.data.deleteCart)
+            document.location.reload()
+        })
 })
 
 // Evento borrar producto según su id
 for (let i=0;i < deleteProductBtn.length;i++) {
     deleteProductBtn[i].addEventListener('click', async () => {
-        await fetch('/api/userdata/getuser')
+        await fetch('/api/graphql',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({query:
+                    `
+                    {
+                        getByUser(user: "${user}") {
+                            cartId
+                        }
+                    }
+                    `
+                })
+            })
         .then(res => res.json())
         .then(json => {
-            userCartId = json.cartId
+            userCartId = json.data.getByUser.cartId
         })
-        fetch(`/api/carrito/${userCartId}/productos/${deleteProductBtn[i].id}`, { method: 'DELETE' })
+        await fetch('/api/graphql',
+            {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({query:
+                    `
+                    mutation {
+                        removeProductFromCart
+                        (
+                            productId: {_id: "${deleteProductBtn[i].id}"},
+                            cartId: "${userCartId}"
+                        )
+                        {
+                            productos {
+                                product,
+                                price,
+                                description,
+                                stock,
+                                thumbnail
+                            }
+                        }
+                    }
+                    `
+                })
+            })
         .then(res => res.json())
         .then(cart => {
-            const cartProds = cart.productos.map(product => {
+            const cartProds = cart.data.removeProductFromCart.productos.map(product => {
                     return `<div class='productDiv'>
                                 <div class='productContainer'>
                                     <p class='productContainerP'><span class='productContainerSpan'>Producto: </span>${product.product}</p>

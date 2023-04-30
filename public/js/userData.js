@@ -7,7 +7,7 @@ const phone = document.getElementById('phone')
 const avatar = document.getElementById('avatar')
 const _id = document.getElementById('_id')
 
-userDataForm.addEventListener('submit', (e) => {
+userDataForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     const userInfoToUpdate = {
         userDBid: _id.value,
@@ -15,16 +15,29 @@ userDataForm.addEventListener('submit', (e) => {
         address: direccion.value,
         age: age.value,
         phone: phone.value,
-        avatar: avatar.value,
+        avatar: avatar.value
     }
-    fetch('/api/userdata/',
-    {
-        method: 'POST',
-        body: JSON.stringify(userInfoToUpdate),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+    await fetch('/api/graphql/',
+        {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({query:
+                `
+                mutation {
+                    updateUser (
+                        id: "${userInfoToUpdate.userDBid}",
+                        data: { 
+                            name: "${userInfoToUpdate.name}",
+                            address: "${userInfoToUpdate.address}",
+                            age: ${userInfoToUpdate.age},
+                            phone: "${userInfoToUpdate.phone}",
+                            avatar: "${userInfoToUpdate.avatar}"
+                        }
+                    ) { user }
+                }
+                `
+            })
+        })
     .then(res => res.json())
     .then(json => {
         Toastify({

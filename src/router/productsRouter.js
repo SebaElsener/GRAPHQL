@@ -22,12 +22,12 @@ routeProducts.get('/form', productsForm)
 routeProducts.get('/:id', getProductById)
 
 // recibe y agrega un producto, y lo devuelve con su id asignado
-routeProducts.post('/', postProduct)
+routeProducts.post('/', adminUser, postProduct)
 
 // recibe y actualiza un producto según su id
-routeProducts.put('/:id', updateProductById)
+routeProducts.put('/:id', adminUser, updateProductById)
 
 // elimina un producto según su id
-routeProducts.delete('/:id', deleteProductById)
+routeProducts.delete('/:id', adminUser, deleteProductById)
 
 export default routeProducts

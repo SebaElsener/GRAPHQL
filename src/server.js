@@ -25,6 +25,9 @@ import routeError from './middleware/routeError.js'
 import { logs } from './middleware/logs.js'
 import userData from './router/userData.js'
 import { infoLogger, errorLogger } from './logger.js'
+import { graphqlHTTP } from 'express-graphql'
+import graphqlController from './controller/graphqlController.js'
+
 
 dotenv.config()
 
@@ -69,8 +72,9 @@ app.use(passport.initialize())
 app.use(passport.session())
 // Middleware para registrar todas la peticiones recibidas
 app.use(logs)
+
 app.use('/', userLogin)
-app.use('/api/productos', routeProducts)
+app.use('/api/productos', userLoginWatcher, routeProducts)
 app.use('/api/carrito', userLoginWatcher, routeCart)
 app.use('/api/userdata', userLoginWatcher, userData)
 app.use('/api/login', userLogin)
@@ -78,6 +82,7 @@ app.use('/api/logout', userLogout)
 app.use('/api/register', userReg)
 app.use('/api/home', homeRoute)
 app.use('/api/', infoAndRandoms)
+app.use('/api/graphql', graphqlHTTP(graphqlController))
 
 // Middleware para mostrar error al intentar acceder a una ruta/método no implementados
 app.use(routeError)
