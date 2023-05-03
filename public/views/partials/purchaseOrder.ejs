@@ -6,54 +6,15 @@
 
         <%- include('./head') %>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+        <script src="/ejs/ejs.min.js"></script>
         
     </head>
 
-    <body>
+    <input type="hidden" id="usuario" value="<%= userName %>">
 
-        <div class='cartsContainer'>
-
-            <nav id="userContainer">
-                <div class="userDataContainer">
-                    <div class="dropdown">
-                        <div class="avatarItem"><img class='userAvatar' src='<%= userData.avatar %>' alt="Avatar"></div>
-                        <div class="dropdown-content">
-                            <a class='itemLink' href="/api/logout">Logout</a>
-                        </div>
-                    </div>
-                    <h2 class="userTitle"><%= userData.user %></h2>
-                </div>
-            </nav>
-
-            <div class='cartProducts'>
-
-                <h2 class='cartH2 h2PurchaseOrder'>ORDEN DE COMPRA</h2>
-
-                <div class='products'>
-                    <% cart.productos.forEach(function(product) { %>
-                        <div class='productDiv'>
-                            <div class='productContainer'>
-                                <p class='productContainerP'><span class='productContainerSpan'>Producto: </span><%= product.product %></p>
-                                <p class='productContainerP'><span class='productContainerSpan'>Precio: </span>$<%= product.price %></p>
-                                <p class='productContainerP'><span class='productContainerSpan'>Descripción: </span><%= product.description %></p>
-                            </div>
-                            <div class='thumbnailContainer'>
-                                <img class='thumbnail thumbnailImg' src='<%= product.thumbnail %>' alt='imagen producto' width='60px'>
-                            </div>
-                        </div>
-                    <% }) %>
-                </div>
-
-                <button id='confirmPurchaseBtn'>CONFIRMAR</button>
-                <button class='cancelPurchaseBtn'>CANCELAR</button>
-
-            </div>
-
-        </div>
-
+    <div id="bodyContainer">
         <script src='../../js/purchaseOrder.js'></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-    </body>
+    </div>
 
 </html>

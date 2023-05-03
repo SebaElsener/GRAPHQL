@@ -4,53 +4,23 @@
 
     <head>
 
-        <%- include('./partials/head') %>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/index.css">        
         <!-- Script normalizr -->
         <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.2/dist/normalizr.browser.min.js"></script>
         <!-- Toastify -->
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-        <script src="/socket.io/socket.io.js"></script>
         
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/ejs/ejs.min.js"></script>
+
     </head>
 
-    <body>
-    
-        <nav id="userContainer">
-            <div class="userDataContainer">
-                <div class="dropdown">
-                    <div class="avatarItem"><img class='userAvatar' src='<%= userData.avatar %>' alt="Avatar"></div>
-                    <div class="dropdown-content">
-                        <% if (userName === 'admin@admin.com') { %>
-                            <a class='itemLink' href="/api/userdata/usersadmin">Administrar usuarios</a>
-                        <% } %>
-                        <% if (userData.admin === 'true') { %>
-                            <a class='itemLink' href="/api/productos/form">Ingreso de productos</a>
-                        <% } %>
-                        <a class='itemLink' href="/api/userdata">Mis datos</a>
-                        <a class='itemLink' href="/api/logout">Logout</a>
-                    </div>
-                </div>
-                <h2 class="userTitle">Bienvenido <span id='<%= userData._id %>' class="userWelcome"><%= userName %></span></h2>
-            </div>
-            <ul class="navList">
-                <li class="navItem">
-                    <a class='cartLink' href='/api/carrito'>CARRITO</a><span class='cartLinkSpan'></span>
-                </li>
-            </ul>
-        </nav>
-
-        <main id='main'>
-
-            <%- include('./partials/cards') %>
-
-            <%- include('./partials/messages') %>
-
-        </main>
-
-        <script src="/js/main.js"></script>
-        <script src="/js/socketLogic.js"></script>
+    <input type="hidden" id="usuario" value="<%= userName %>">
+    <div id="bodyContainer">
+        <script src="/js/index.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-    </body>
+    </div>
 
 </html>

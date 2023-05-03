@@ -7,38 +7,38 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     </head>
 
-    <body>
+<body>
 
-        <h2 class="formTitle">Ingreso de productos</h2>
+    <h2 class="formTitle">Ingreso de productos</h2>
 
-        <form id='productsForm'>
-            <div class="productPriceStockCont">
-                <label for="product">Product: </label>
-                <input class='product' type="text" name="product" placeholder="Ingrese producto" required>
-                <label for="price">Price: </label>
-                <input class="price" type="text" name="price" placeholder="Precio" required>
-                <label for="stock">Stock: </label>
-                <input class="stock" type="text" name="stock" placeholder="Stock" required>
-            </div>
-            <div class="descriptionCodeCont">
-                <label for="description">Description: </label>
-                <input class='description' type="text" name="description" placeholder="Ingrese descripción del producto" required>
-                <label for="code">Code: </label>
-                <input class="code" type="text" name="code" placeholder="Código" required>
-            </div>
-            <div class="thumbnailCont">
-                <label for="thumbnail">Thumbnail: (URL)</label>
-                <input class="thumbnailInput" type="url" name="thumbnail" placeholder="Ingrese link" required>
-            </div>
-            <button class="sendBtn" type="submit">Enviar</button>
+    <form id='productsForm'>
+        <div class="productPriceStockCont">
+            <label for="product">Product: </label>
+            <input class='product' type="text" name="product" placeholder="Ingrese producto" required>
+            <label for="price">Price: </label>
+            <input class="price" type="text" name="price" placeholder="Precio" required>
+            <label for="stock">Stock: </label>
+            <input class="stock" type="text" name="stock" placeholder="Stock" required>
+        </div>
+        <div class="descriptionCodeCont">
+            <label for="description">Description: </label>
+            <input class='description' type="text" name="description" placeholder="Ingrese descripción del producto" required>
+            <label for="code">Code: </label>
+            <input class="code" type="text" name="code" placeholder="Código" required>
+        </div>
+        <div class="thumbnailCont">
+            <label for="thumbnail">Thumbnail: (URL)</label>
+            <input class="thumbnailInput" type="url" name="thumbnail" placeholder="Ingrese link" required>
+        </div>
+        <button class="sendBtn" type="submit">Enviar</button>
 
-        </form>
+    </form>
 
-        <a class='formBackLink' href="/api/productos"><button class="formBackLinkBtn">Volver</button></a>
+    <a class='formBackLink' href="/api/productos"><button class="formBackLinkBtn">Volver</button></a>
 
-        <script src="../../js/productsForm.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-    </body>
+    <script src="/js/productsForm.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+</body>
 
 </html>

@@ -4,24 +4,6 @@ import { DAOcarrito } from '../persistence/factory.js'
 import sendMail from '../nodemailer/mailSender.js'
 import { infoLogger } from '../logger.js'
 import twilioSender from '../twilio/twilioMessage.js'
-import { usersAdministrationDTO } from '../persistence/DTO/usersDTO.js'
-
-const getByUser = async (userName) => {
-    return await DAOusers.getByUser(userName)
-}
-
-const getAllUsers = async () => {
-    const getData = await DAOusers.getAll()
-    return usersAdministrationDTO(getData)
-}
-
-const updateUserById = async (userDBid, userInfoToUpdate) => {
-    return await DAOusers.updateById(userDBid, userInfoToUpdate)
-}
-
-const updateUserWithCart = async (userId, cartId) => {
-    return await DAOusers.updateById(userId, cartId)
-}
 
 const purchase = async (userName) => {
     const userData = await DAOusers.getByUser(userName)
@@ -49,20 +31,4 @@ const purchase = async (userName) => {
     return userData.cartId
 }
 
-const makeUsersAdmin = async (users) => {
-    return await DAOusers.updateUsersAdmin(users)
-}
-
-const deleteUsers = async (users) => {
-    return await DAOusers.deleteUsers(users)
-}
-
-export {
-    getByUser,
-    updateUserById,
-    updateUserWithCart,
-    purchase,
-    getAllUsers,
-    makeUsersAdmin,
-    deleteUsers
-}
+export default purchase

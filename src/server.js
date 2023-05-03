@@ -10,8 +10,6 @@ import userLogin from './router/userLogin.js'
 import homeRoute from './router/homeRoute.js'
 import userReg from './router/userReg.js'
 import passport from 'passport'
-import routeProducts from './router/productsRouter.js'
-import routeCart from './router/cartRouter.js'
 import userLogout from './router/userLogout.js'
 import userLoginWatcher from './middleware/userLoginWatcher.js'
 import _yargs from 'yargs'
@@ -23,11 +21,8 @@ import * as os from 'os'
 import compression from 'compression'
 import routeError from './middleware/routeError.js'
 import { logs } from './middleware/logs.js'
-import userData from './router/userData.js'
 import { infoLogger, errorLogger } from './logger.js'
-import { graphqlHTTP } from 'express-graphql'
 import graphqlController from './controller/graphqlController.js'
-
 
 dotenv.config()
 
@@ -70,20 +65,57 @@ passport.deserializeUser((user, done) => {
 })
 app.use(passport.initialize())
 app.use(passport.session())
-// Middleware para registrar todas la peticiones recibidas
-app.use(logs)
 
 app.use('/', userLogin)
-app.use('/api/productos', userLoginWatcher, routeProducts)
-app.use('/api/carrito', userLoginWatcher, routeCart)
-app.use('/api/userdata', userLoginWatcher, userData)
+app.use('/api/productos', userLoginWatcher, (req, res) => {
+    const userName = req.session.passport.user
+    res.render('index', {
+        userName: userName
+    })
+})
+app.use('/api/productsform', userLoginWatcher, (req, res) => {
+    const userName = req.session.passport.user
+    res.render('./partials/form',
+        {
+            userName: userName
+        }
+    )
+})
+app.use('/api/carrito', userLoginWatcher, (req, res) => {
+    const userName = req.session.passport.user
+    res.render('./partials/cart',
+        {
+            userName: userName
+        }
+    )
+})
+app.use('/api/purchase', userLoginWatcher, (req, res) => {
+    const userName = req.session.passport.user
+    res.render('./partials/purchaseOrder',
+        {
+            userName: userName
+        }
+    )
+})
+app.use('/api/userdata/usersadmin', userLoginWatcher, (req, res) => {
+    res.render('./partials/usersAdmin')
+})
+app.use('/api/userdata', userLoginWatcher, (req, res) => {
+    const userName = req.session.passport.user
+    res.render('userData',
+        {
+            userName: userName
+        }
+    )
+})
 app.use('/api/login', userLogin)
 app.use('/api/logout', userLogout)
 app.use('/api/register', userReg)
 app.use('/api/home', homeRoute)
 app.use('/api/', infoAndRandoms)
-app.use('/api/graphql', graphqlHTTP(graphqlController))
-
+app.use('/api/graphql', new graphqlController())
+// Middleware para registrar todas la peticiones recibidas
+app.use(logs)
 // Middleware para mostrar error al intentar acceder a una ruta/método no implementados
 app.use(routeError)
 

@@ -1,0 +1,34 @@
+
+<body>
+
+    <h2 class="formTitle">Mis datos</h2>
+
+    <form id='userDataForm' autocomplete="off">
+        <label class="userName" for="userName"><span class="labelTitle">Mi email</span>
+            <input id='userName' class="userNameInput" name='username' type="email" value="<%= userData.userEmail %>" disabled>
+        </label>
+        <!-- ///////////// TODO /////////////////// -->
+        <!-- <label class="userName" for="userPass"><span class="labelTitle">Mi contraseña</span>
+            <input id='userPass' class="userPassInput" name='password' type="password">
+        </label> -->
+        <label class="userName" for="nameLastname"><span class="labelTitle">Mi nombre y apellido</span>
+            <input id='nameLastname' class="userNameInput" name='nameLastname' type="text" value="<%= userData.userName %>">
+        </label>
+        <label class="userName" for="direccion"><span class="labelTitle">Mi dirección</span>
+            <input id='direccion' class="userNameInput" name='address' type="text" value="<%= userData.userAddress %>">
+        </label>
+        <label class="userName" for="age"><span class="labelTitle">Mi edad</span>
+            <input id='age' class="userNameInput" name='age' type="number" value="<%= userData.userAge %>">
+        </label>
+        <label class="userName" for="phone"><span class="labelTitle">Mi teléfono</span>
+            <input id='phone' class="userNameInput" name='phone' type="text" value="<%= userData.userPhone %>">
+        </label>
+        <label class="userName" for="avatar"><span class="labelTitle">Mi foto/Avatar</span>
+            <input id='avatar' class="userNameInput" name='avatar' type="url" value="<%= userData.userAvatar %>">
+        </label>
+        <button class="regBtn" type="submit">Guardar</button>
+    </form>
+
+    <a class='formBackLink' href="/api/productos"><button class="formBackLinkBtn">Volver</button></a>
+
+</body>

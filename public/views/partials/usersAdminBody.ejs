@@ -1,0 +1,32 @@
+
+<body>
+
+    <h2 class="formTitle">Administración de usuarios</h2>
+
+    <form id='usersForm'>
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Eliminar</th>
+                    <th>Administrador</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% allUsers.forEach(function(user) { %>
+                    <tr id='<%- user.user %>'>
+                        <td class="usersAdminTd"><%= user.user %></td>
+                        <td><input id='delete-<%= user._id %>' class="usersAdminDeleteUser" type="checkbox"></td>
+                        <td><input id='<%= user._id %>' <% if(user.admin === 'true') { %> <%= 'checked' %> <% } %> class="usersAdminMakeUserAdmin" type="checkbox"></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <button class="sendBtn sendBtnUsersAdmin" type="submit">Enviar</button>
+
+    </form>
+
+    <a class='formBackLink' href="/api/productos"><button class="formBackLinkBtn">Volver</button></a>
+
+</body>

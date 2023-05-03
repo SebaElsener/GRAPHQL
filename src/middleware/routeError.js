@@ -3,7 +3,11 @@ import { errorLogger } from "../logger.js"
 
 const routeError = (req, res, next) => {
     if (res.status = '404') {
-        errorLogger.warn(`ruta '${req.path}' metodo '${req.method}' no implementada`)
+        const routeError = `Ruta '${req.path}' metodo '${req.method}' no implementada`
+        errorLogger.warn(routeError)
+        res.render('routeError', {
+            badRoute: routeError
+        })
     }
     next()
 }

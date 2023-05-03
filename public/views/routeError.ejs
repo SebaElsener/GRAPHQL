@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('./partials/head') %>
+    <title>ERROR - NO IMPLEMENTADO</title>
+</head>
+
+<body>
+
+    <div id="userContainer">
+        <h2 class="userTitle"><%= badRoute  %>, en unos segundos será redirigido</h2>
+    </div>
+
+    <script>
+        setTimeout(() => {
+            document.location.href = '/api/productos'
+        }, 4000)
+    </script>
+
+</body>
+
+</html>

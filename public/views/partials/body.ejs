@@ -1,0 +1,94 @@
+
+
+<body>
+
+    <nav id="userContainer">
+        <div class="userDataContainer">
+            <div class="dropdown">
+                <div class="avatarItem"><img class="userAvatar" alt="Avatar"></div>
+                <div class="dropdown-content">
+                    <% if (userName === "admin@admin.com") { %>
+                        <a class="itemLink" href="/api/userdata/usersadmin">Administrar usuarios</a>
+                    <% } %>
+                    <% if (userData.admin === "true") { %>
+                        <a class="itemLink" href="/api/productsform">Ingreso de productos</a>
+                    <% } %>
+                    <a class="itemLink" href="/api/userdata">Mis datos</a>
+                    <a class="itemLink" href="/api/logout">Logout</a>
+                </div>
+            </div>
+            <h2 class="userTitle">Bienvenido <span class="userWelcome"><%= userName %></span></h2>
+        </div>
+        <ul class="navList">
+            <li class="navItem">
+                <a class="cartLink" href="/api/carrito">CARRITO</a><span class="cartLinkSpan"></span>
+            </li>
+        </ul>
+    </nav>
+
+    <main id="main">
+
+        <section id="productsCards">
+
+            <% if (productsQty) { %>
+                <div class="cardContainer">
+                    <% allProducts.forEach(function(product) { %>
+                        <div class="productCard">
+                            <input class="cardInput productInput" value="<%= product.product %>">
+                            <div class="priceContainer">
+                                <span class="priceSign">$ </span>
+                                <input class="cardInput price" value="<%= product.price %>">
+                            </div>
+                            <div class="thumbContainer">
+                                <img class="thumbnail" src="<%= product.thumbnail %>" alt="imagen producto" width="60px">
+                            </div>
+                            <input class="cardInput descriptionInput" value="<%= product.description %>">
+                            <div class="stockContainer">
+                                <span class="priceSign">Stock: </span>
+                                <input class="cardInput stock" value="<%= product.stock %>">
+                            </div>
+                            <div class="buyBtnContainer">
+                                <button class="buyBtn" id="<%= product._id %>">COMPRAR</button>
+                            </div>
+                            <% if (userData.admin === "true") { %>
+                                <div class="actionBtnsContainer">
+                                    <button class="updateBtn">ACTUALIZAR</button>
+                                    <button class="deleteBtn">ELIMINAR</button>
+                                </div>
+                            <% } %>
+                            <input class="codeInput" type="hidden" value="<%= product.code %>">
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p class="prodsLink">No se encontraron productos</p>
+            <% } %>
+        
+        </section>
+
+        <article id="MessagesCenter">
+
+            <h2 class="messagesCenterTitle" style="text-align: center; margin-bottom: 10px">Centro de mensajes</h2>
+        
+            <div id="userInfo">
+                <p id="userEmail"><%= userData.user %></p>
+                <p id="userName"><%= userData.name %></p>
+                <p id="userAge"><%= userData.age %></p>
+                <p id="userAddress"><%= userData.address %></p>
+                <p id="userPhone"><%= userData.phone %></p>
+                <p id="userAvatar"><%= userData.avatar %></p>
+            </div>
+        
+            <div id="messagesContainer">
+            </div>
+        
+            <form id="messagesForm">
+                <input id="messageContent" type="text" placeholder="Ingrese su mensaje" required>
+                <button class="msgBtn" type="submit">Enviar</button>
+            </form>
+        
+        </article>
+
+    </main>
+
+</body>

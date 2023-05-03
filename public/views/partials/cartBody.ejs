@@ -1,0 +1,56 @@
+
+<body>
+
+    <div class='cartsContainer'>
+        <nav id="userContainer">
+            <div class="userDataContainer">
+                <div class="dropdown">
+                    <div class="avatarItem"><img class='userAvatar' src='<%= userData.avatar %>' alt="Avatar"></div>
+                    <div class="dropdown-content">
+                        <a class='itemLink' href="/api/logout">Logout</a>
+                    </div>
+                </div>
+                <h2 class="userTitle"><%= userData.user %></h2>
+            </div>
+            <ul class="navList cartNav">
+                <h2 class='cartH2'>Carrito</h2>
+            </ul>
+        </nav>
+
+        <div class='cartProducts'>
+            <a href='/api/productos' class='backLink'>Seguir comprando...</a>
+
+            <div class='products'>
+                <% if (productsQty) { %>
+                    <% cart.forEach(function(product) { %>
+                        <div class='productDiv'>
+                            <div class='productContainer'>
+                                <p class='productContainerP'><span class='productContainerSpan'>Producto: </span><%= product.product %></p>
+                                <p class='productContainerP'><span class='productContainerSpan'>Precio: </span>$<%= product.price %></p>
+                                <p class='productContainerP'><span class='productContainerSpan'>Descripción: </span><%= product.description %></p>
+                                <p class='productContainerP'><span class='productContainerSpan'>Stock: </span><%= product.stock %></p>
+                            </div>
+                            <div class='thumbnailContainer'>
+                                <img class='thumbnail thumbnailImg' src='<%= product.thumbnail %>' alt='imagen producto' width='60px'>
+                            </div>
+                            <div class='deleteProductBtnContainer'>
+                                <button class='deleteProductBtn' id='<%= product._id %>'>Eliminar</button>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class='emptyCartContainer'>
+                        <p class='emptyCart'>Carrito vacío</p>
+                        <a href='/api/productos' class='buyProductLink'>Ir a comprar</a>
+                    </div>
+                <% } %>
+            </div>
+
+            <button id='endPurchaseBtn'>Generar orden de compra</button>
+            <button class='deleteCartBtn'>Eliminar carrito</button>
+
+        </div>
+
+    </div>
+
+</body>
